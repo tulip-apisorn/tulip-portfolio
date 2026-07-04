@@ -1,89 +1,109 @@
-# ตู้เอกสาร (Document Cabinet) — Prototype
+# Document Cabinet — Prototype
 
-โปรเจกต์นี้เริ่มจากปัญหาจริง: เอกสารสำคัญของคนคนหนึ่งกระจัดกระจายอยู่ทั้ง physical
-(แฟ้ม/ตู้เอกสารที่บ้าน) และ digital (Google Drive, iCloud, iPhone Files, OneDrive
-— คนละที่ ไม่มี index กลาง) พอถึงเวลาต้องใช้จริง (ต่ออายุปลวก, จำนอง/รีไฟแนนซ์,
-ประกัน ฯลฯ) กลับหาไม่เจอ หรือรู้ตัวช้าเกินไปว่าใกล้ครบกำหนดแล้ว
+This project starts from a real problem: one adult's important documents are
+scattered across both physical storage (folders/cabinets at home) and digital
+storage (Google Drive, iCloud, iPhone Files, OneDrive — all separate, no
+central index). When it's actually time to use them (termite service renewal,
+mortgage/refinance, insurance, etc.), they're either impossible to find or the
+renewal deadline sneaks up too late.
 
 ## Problem statement
 
-- เอกสารสำคัญกระจายอยู่หลายที่ ทั้ง physical และ cloud หลายเจ้า
-- ไม่มี "จุดเดียว" ที่บอกได้ว่าเอกสารอะไรอยู่ไหน และอะไรใกล้ครบกำหนดต่ออายุ
-- ของที่เป็น physical ยิ่งหายาก เพราะไม่มีการจดตำแหน่งที่เก็บไว้
-- ไม่มี reminder ล่วงหน้า ทำให้พลาดกำหนดต่ออายุ/ชำระเงินอยู่บ่อยๆ
+- Important documents are scattered across multiple places, both physical and
+  several different cloud providers.
+- There's no single place that tells you what document is where, or what's
+  coming up for renewal.
+- Physical documents are the hardest to find, because there's no record of
+  where they're actually stored.
+- There's no advance reminder, so renewal/payment deadlines get missed
+  regularly.
 
 ## Solution / Vision
 
-Flow ที่อยากได้ในระยะยาว:
+The long-term flow we want:
 
-1. เซฟไฟล์/ถ่ายรูปเอกสารไว้ที่เดียว (ที่เดิมที่ใช้อยู่แล้วก็ได้ ไม่ต้องเปลี่ยนพฤติกรรม)
-2. มี agent ที่ดู log แล้วบันทึกลง sheet กลาง (ชื่อเอกสาร, ประเภท, วันครบกำหนด,
-   ลิงก์ไฟล์จริง หรือตำแหน่งจัดเก็บถ้าเป็น physical)
-3. ตั้ง due date ใน calendar อัตโนมัติ พร้อมแนบลิงก์เอกสาร เพื่อเตือนล่วงหน้า
-4. ถ้าเป็นเอกสาร physical ให้บอกตำแหน่งเก็บชัดเจน เช่น "ชั้น 2 ตู้แฟ้มสีเขียว"
+1. Save the file/photo of the document in one place (wherever is already
+   habitual — no need to change behavior).
+2. An agent watches the log and records it in a central sheet (document name,
+   type, due date, real file link, or storage location if physical).
+3. Automatically create a due-date event in the calendar with the document
+   link attached, so reminders go out ahead of time.
+4. For physical documents, clearly state where it's stored, e.g. "2nd floor,
+   green filing cabinet."
 
-งบลงทุนมีจำกัด เป้าหมายคือ build in-house เอง โดยจะเลือกทีหลังว่าจะ schedule
-การเช็ค/แจ้งเตือนด้วย Claude Code routine หรือ cron แบบอื่น (เช่น Codex) —
-ตอนนี้โฟกัสที่การพิสูจน์ workflow ก่อนว่าใช้งานได้จริงหรือไม่
+Budget is limited — the goal is to build this in-house. We'll decide later
+whether to schedule the checking/reminding with a Claude Code routine or
+another kind of cron (e.g. Codex). Right now the focus is proving the
+workflow actually works.
 
-## Prototype ตอนนี้ (`index.html`)
+## Current prototype (`index.html`)
 
-เป็น static HTML/JS ไฟล์เดียว เปิดในเบราว์เซอร์ได้เลย ไม่ต้อง build ไม่ต้องมี
-server ข้อมูลเก็บใน `localStorage` ของเบราว์เซอร์ เพื่อจำลอง "sheet กลาง" แบบ
-เร็วที่สุด ก่อนต่อ backend จริง
+A single static HTML/JS file — open it directly in a browser, no build step,
+no server. Data is stored in the browser's `localStorage`, simulating a
+"central sheet" as quickly as possible, before wiring up a real backend.
 
-จำลอง workflow เต็มรูปแบบ:
+Simulates the full workflow:
 
-- แดชบอร์ดสรุป: ทั้งหมด / ใกล้ครบกำหนด / เลยกำหนด / เก็บแบบ physical กี่รายการ
-- รายการเอกสารเรียงตามวันครบกำหนด ใกล้สุดขึ้นก่อน พร้อมแถบสีบอกความเร่งด่วน
-- แต่ละรายการระบุที่จัดเก็บจริง: ถ้าเป็น cloud มีลิงก์เปิดตรง, ถ้าเป็น physical
-  บอกตำแหน่งเก็บ (ชั้น/ตู้/สี ฯลฯ)
-- เพิ่ม/แก้ไข/ลบ/กดว่า "ต่ออายุแล้ว" ได้
-- Export/Import เป็น JSON (จำลองการย้ายข้อมูลไป Google Sheet จริงในอนาคต)
+- Summary dashboard: total / due soon / overdue / stored physically
+- Document list sorted by due date, soonest first, with an urgency color
+  stripe
+- Each item shows its real storage location: a direct link if it's cloud, or
+  the storage location (shelf/cabinet/color, etc.) if it's physical
+- Add / edit / delete / mark as "renewed"
+- Export/Import as JSON (simulating a future migration to a real Google
+  Sheet)
 
-สิ่งที่ *ยังไม่ทำ* ในเวอร์ชันนี้ (ตั้งใจตัดออกเพื่อให้ prototype เร็ว): ยังไม่ต่อ
-Google Sheet/Calendar/Drive จริง, ยังไม่มี agent อ่าน log อัตโนมัติ, ยังไม่มีการ
-แจ้งเตือนจริง (LINE/email) — ทั้งหมดนี้คือ Phase ถัดไปถ้า workflow ผ่าน
+What's *not* done in this version (intentionally cut to keep the prototype
+fast): no real Google Sheet/Calendar/Drive integration yet, no agent reading
+logs automatically yet, no real notifications yet (LINE/email) — all of that
+is the next phase if the workflow holds up.
 
 ## Data model
 
-| field | ความหมาย |
+| field | meaning |
 |---|---|
-| `name` | ชื่อรายการ เช่น "ต่ออายุกำจัดปลวก" |
-| `category` | หมวดหมู่ (ปลวก, จำนอง/รีไฟแนนซ์, ประกัน, อื่นๆ) |
-| `dueDate` | วันครบกำหนด |
-| `reminderDaysBefore` | เตือนล่วงหน้ากี่วัน |
-| `storageType` | `cloud` หรือ `physical` |
-| `cloudLink` | ลิงก์เอกสารจริง (ถ้า `storageType = cloud`) |
-| `physicalLocation` | ตำแหน่งจัดเก็บ เช่น "ชั้น 2 ตู้แฟ้มสีเขียว" (ถ้า `storageType = physical`) |
-| `note` | หมายเหตุอิสระ |
+| `name` | Item name, e.g. "Termite treatment renewal" |
+| `category` | Category (termite, mortgage/refinance, insurance, other) |
+| `dueDate` | Due date |
+| `reminderDaysBefore` | Days of advance notice |
+| `storageType` | `cloud` or `physical` |
+| `cloudLink` | Real document link (if `storageType = cloud`) |
+| `physicalLocation` | Storage location, e.g. "2nd floor, green filing cabinet" (if `storageType = physical`) |
+| `note` | Free-form note |
 
-## Feasibility — แนวทางต่อยอด (ต้นทุนต่ำ)
+## Feasibility — low-cost paths forward
 
-เรียงตามลำดับที่น่าจะทำก่อน-หลัง ไม่ใช่ทุกอันต้องทำ:
+Roughly in the order they're worth doing — not everything needs to happen:
 
-1. **Google Sheet เป็น source of truth จริง** แทน localStorage — ใช้ Google Apps
-   Script ทำเป็น Web App ฟรี, Apps Script มี Calendar service ในตัวอยู่แล้ว
-   เขียน 1 สคริปต์สร้าง event ลง Google Calendar จากแถวใน sheet ได้เลย
-   ไม่ต้องขอ API key แยก
-2. **Reminder จริง** ผ่าน LINE Notify/LINE OA หรือ Telegram bot (ฟรี ใช้งานง่าย
-   กว่า email สำหรับคนไทย) ยิงจาก Apps Script trigger รายวัน
-3. **Scheduling ฝั่ง agent**: ใช้ Claude Code scheduled routine (มีเครื่องมือ
-   สร้าง cron trigger อยู่แล้วในสภาพแวดล้อมนี้) หรือ cron แบบอื่น (Codex, GitHub
-   Actions cron ฟรีสำหรับ repo, ฯลฯ) รันเช็ค due date รายวันแล้วอัปเดต
-   sheet/ส่งเตือน — เลือกได้ทีหลังตามที่ถนัด ไม่ผูกกับ prototype นี้
-4. **ลิงก์เอกสารจริงจาก Drive/iCloud** — ระยะแรกแปะลิงก์เอง (manual) พอไหว
-   เพราะ volume เอกสารต่อเดือนไม่เยอะ ยังไม่คุ้มที่จะต่อ API อัตโนมัติดึงไฟล์
-5. **OCR อ่านวันหมดอายุจากรูปถ่ายเอกสารอัตโนมัติ** (เช่น ให้ Claude vision อ่าน
-   ใบเสร็จ/กรมธรรม์แล้วกรอกให้) — stretch goal เก็บไว้ท้ายสุด เพราะ volume ต่ำ
-   ทำ manual entry ไปก่อนก็ยังคุ้มกว่าลงทุนต่อ pipeline
+1. **A real Google Sheet as the source of truth** instead of localStorage —
+   use Google Apps Script as a free Web App. Apps Script already has a
+   Calendar service built in, so one script can create Google Calendar
+   events straight from sheet rows, no separate API key needed.
+2. **Real reminders** via LINE Notify/LINE OA or a Telegram bot (free, and
+   more practical than email for a Thai user) fired from a daily Apps Script
+   trigger.
+3. **Scheduling on the agent side**: use a Claude Code scheduled routine
+   (this environment already has a tool for creating cron triggers) or
+   another kind of cron (Codex, GitHub Actions cron — free for repos, etc.)
+   to check due dates daily and update the sheet/send reminders — pick
+   whichever fits later, it's not tied to this prototype.
+4. **Real document links from Drive/iCloud** — pasting links manually is
+   fine for now, since monthly document volume is low; not yet worth wiring
+   up an API to fetch files automatically.
+5. **OCR to read expiry dates from document photos automatically** (e.g.
+   have Claude vision read a receipt/policy and fill it in) — a stretch
+   goal saved for last, since volume is low enough that manual entry is
+   still cheaper than building a pipeline for it.
 
-จุดสำคัญ: ทุกตัวเลือกข้างบนใช้ free tier ได้เกือบหมด งบไม่ใช่คอขวด — คอขวดจริง
-คือเวลาที่ใช้เขียน automation กับความสม่ำเสมอในการกรอกข้อมูล (habit) มากกว่า
+Key point: nearly every option above fits comfortably in a free tier —
+budget isn't the bottleneck. The real bottleneck is the time to write the
+automation and the habit of actually logging documents consistently.
 
 ## Next steps
 
-1. ลองใช้ prototype นี้กับเอกสารจริงสัก 5-10 รายการ ดูว่า field ที่มีพอไหม
-2. ตัดสินใจว่า source of truth จะเป็น Google Sheet หรือยังคง local ต่อ
-3. เลือกวิธี schedule การเช็ค/แจ้งเตือน (Claude Code routine vs cron อื่น)
-4. ค่อยต่อ Calendar + reminder จริงเป็น phase ถัดไป
+1. Try the prototype with 5-10 real documents and see if the fields cover
+   what's needed.
+2. Decide whether the source of truth becomes a Google Sheet or stays local.
+3. Pick a scheduling approach for checks/reminders (Claude Code routine vs.
+   another cron).
+4. Wire up real Calendar + reminders as the next phase.
