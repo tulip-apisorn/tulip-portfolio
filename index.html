@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ตู้เอกสาร — Document Cabinet Prototype</title>
+<style>
+  :root {
+    --ink: #14231a;
+    --ink-soft: #3c4a3f;
+    --paper: #eef0e7;
+    --paper-raised: #f7f8f2;
+    --line: #d7d9cc;
+    --accent: #3b6a46;
+    --accent-strong: #2b4d33;
+    --kraft: #b3793f;
+    --kraft-bg: #f1e3cd;
+    --good: #3f8a54;
+    --good-bg: #e3efe4;
+    --warn: #b9791f;
+    --warn-bg: #f6ead2;
+    --critical: #b1402c;
+    --critical-bg: #f7dfd8;
+    --shadow: 0 1px 2px rgba(20, 35, 26, 0.06), 0 6px 16px rgba(20, 35, 26, 0.05);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #e7e9e1;
+      --ink-soft: #b6bcac;
+      --paper: #11160f;
+      --paper-raised: #191f15;
+      --line: #2c3427;
+      --accent: #6fa97d;
+      --accent-strong: #8fc49a;
+      --kraft: #d2a377;
+      --kraft-bg: #2c2419;
+      --good: #6fbb80;
+      --good-bg: #1c2b1e;
+      --warn: #e0ab54;
+      --warn-bg: #332711;
+      --critical: #e08370;
+      --critical-bg: #341f19;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ink: #e7e9e1;
+    --ink-soft: #b6bcac;
+    --paper: #11160f;
+    --paper-raised: #191f15;
+    --line: #2c3427;
+    --accent: #6fa97d;
+    --accent-strong: #8fc49a;
+    --kraft: #d2a377;
+    --kraft-bg: #2c2419;
+    --good: #6fbb80;
+    --good-bg: #1c2b1e;
+    --warn: #e0ab54;
+    --warn-bg: #332711;
+    --critical: #e08370;
+    --critical-bg: #341f19;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    color-scheme: dark;
+  }
+
+  :root[data-theme="light"] {
+    --ink: #14231a;
+    --ink-soft: #3c4a3f;
+    --paper: #eef0e7;
+    --paper-raised: #f7f8f2;
+    --line: #d7d9cc;
+    --accent: #3b6a46;
+    --accent-strong: #2b4d33;
+    --kraft: #b3793f;
+    --kraft-bg: #f1e3cd;
+    --good: #3f8a54;
+    --good-bg: #e3efe4;
+    --warn: #b9791f;
+    --warn-bg: #f6ead2;
+    --critical: #b1402c;
+    --critical-bg: #f7dfd8;
+    --shadow: 0 1px 2px rgba(20, 35, 26, 0.06), 0 6px 16px rgba(20, 35, 26, 0.05);
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Sarabun", "Noto Sans Thai", "Leelawadee UI", -apple-system,
+      "Segoe UI", Roboto, sans-serif;
+    line-height: 1.5;
+    padding: 2.5rem 1.25rem 4rem;
+  }
+
+  .num {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  header.top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 1.1rem;
+  }
+
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .brand h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+
+  .brand .tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--good-bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    white-space: nowrap;
+  }
+
+  header.top p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    max-width: 46ch;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .stat {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .stat .n {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .stat .l {
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+
+  .stat.critical .n { color: var(--critical); }
+  .stat.warn .n { color: var(--warn); }
+  .stat.good .n { color: var(--accent); }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .toolbar input[type="search"] {
+    flex: 1 1 200px;
+    padding: 0.55rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font: inherit;
+  }
+
+  select {
+    padding: 0.55rem 0.7rem;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font: inherit;
+  }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    color: var(--ink);
+    padding: 0.55rem 0.9rem;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  button:hover { border-color: var(--accent); }
+
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fbfcf8;
+    font-weight: 600;
+  }
+
+  button.primary:hover { background: var(--accent-strong); }
+
+  button.ghost {
+    border-color: transparent;
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  button.ghost:hover { color: var(--critical); border-color: var(--line); }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .card {
+    display: flex;
+    gap: 0.9rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .card .stripe {
+    width: 4px;
+    border-radius: 4px;
+    flex: none;
+  }
+
+  .card.critical .stripe { background: var(--critical); }
+  .card.warn .stripe { background: var(--warn); }
+  .card.good .stripe { background: var(--accent); }
+
+  .card .body { flex: 1; min-width: 0; }
+
+  .card .row1 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: space-between;
+  }
+
+  .card .title { font-weight: 600; }
+
+  .chip {
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    white-space: nowrap;
+  }
+
+  .chip.category { color: var(--kraft); background: var(--kraft-bg); border-color: transparent; }
+  .chip.critical { color: var(--critical); background: var(--critical-bg); border-color: transparent; }
+  .chip.warn { color: var(--warn); background: var(--warn-bg); border-color: transparent; }
+  .chip.good { color: var(--good); background: var(--good-bg); border-color: transparent; }
+
+  .meta {
+    margin-top: 0.4rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    align-items: center;
+  }
+
+  .meta .storage {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .meta a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .meta .loc {
+    color: var(--kraft);
+    font-weight: 600;
+  }
+
+  .note {
+    margin-top: 0.3rem;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.25rem;
+    align-self: flex-start;
+    flex: none;
+  }
+
+  .empty {
+    text-align: center;
+    color: var(--ink-soft);
+    padding: 2rem 1rem;
+    border: 1px dashed var(--line);
+    border-radius: 10px;
+  }
+
+  form.editor {
+    display: none;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  form.editor.open { display: flex; }
+
+  form.editor h2 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+
+  @media (max-width: 560px) {
+    .grid2 { grid-template-columns: 1fr; }
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  label input, label textarea, label select {
+    font: inherit;
+    padding: 0.5rem 0.65rem;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .radiorow {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--ink);
+  }
+
+  .radiorow label {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--ink);
+  }
+
+  .formactions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    border-top: 1px solid var(--line);
+    padding-top: 0.75rem;
+  }
+
+  footer.foot {
+    border-top: 1px solid var(--line);
+    padding-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  footer.foot .tools {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <h1>ตู้เอกสาร</h1>
+      <span class="tag">Prototype · local only</span>
+    </div>
+    <p>รวมทุกเอกสารสำคัญไว้จุดเดียว บอกว่าอะไรใกล้ครบกำหนด และของจริงอยู่ที่ไหน</p>
+  </header>
+
+  <section class="stats" id="stats" aria-label="สรุปภาพรวม"></section>
+
+  <section class="toolbar">
+    <input type="search" id="search" placeholder="ค้นหาชื่อรายการ..." aria-label="ค้นหาชื่อรายการ" />
+    <select id="filterCategory" aria-label="กรองตามหมวดหมู่">
+      <option value="">ทุกหมวดหมู่</option>
+    </select>
+    <select id="filterStatus" aria-label="กรองตามสถานะ">
+      <option value="">ทุกสถานะ</option>
+      <option value="critical">เลยกำหนด</option>
+      <option value="warn">ใกล้ครบกำหนด</option>
+      <option value="good">ปกติ</option>
+    </select>
+    <button class="primary" id="btnNew" type="button">+ เพิ่มรายการ</button>
+  </section>
+
+  <form class="editor" id="editor">
+    <h2 id="editorTitle">เพิ่มรายการเอกสาร</h2>
+    <input type="hidden" id="itemId" />
+
+    <div class="grid2">
+      <label>ชื่อรายการ
+        <input type="text" id="fName" required placeholder="เช่น ต่ออายุกำจัดปลวก" />
+      </label>
+      <label>หมวดหมู่
+        <input type="text" id="fCategory" required placeholder="เช่น ปลวก / ประกัน / จำนอง" list="categoryList" />
+        <datalist id="categoryList"></datalist>
+      </label>
+    </div>
+
+    <div class="grid2">
+      <label>วันครบกำหนด
+        <input type="date" id="fDueDate" required />
+      </label>
+      <label>เตือนล่วงหน้า (วัน)
+        <input type="number" id="fReminder" min="0" value="14" required />
+      </label>
+    </div>
+
+    <div class="radiorow" role="radiogroup" aria-label="ประเภทที่จัดเก็บ">
+      <label><input type="radio" name="storageType" value="cloud" checked /> เก็บแบบ Cloud (มีลิงก์)</label>
+      <label><input type="radio" name="storageType" value="physical" /> เก็บแบบ Physical (ของจริง)</label>
+    </div>
+
+    <label id="wrapCloud">ลิงก์เอกสาร (Google Drive / iCloud / OneDrive)
+      <input type="url" id="fCloudLink" placeholder="https://..." />
+    </label>
+
+    <label id="wrapPhysical" style="display:none;">ตำแหน่งจัดเก็บจริง
+      <input type="text" id="fPhysicalLocation" placeholder="เช่น ชั้น 2 ตู้แฟ้มสีเขียว ช่องบน" />
+    </label>
+
+    <label>หมายเหตุ (ถ้ามี)
+      <textarea id="fNote" rows="2" placeholder="รายละเอียดเพิ่มเติม..."></textarea>
+    </label>
+
+    <div class="formactions">
+      <button type="button" id="btnCancel">ยกเลิก</button>
+      <button type="submit" class="primary">บันทึก</button>
+    </div>
+  </form>
+
+  <section class="list" id="list" aria-label="รายการเอกสาร"></section>
+
+  <footer class="foot">
+    <span id="footNote"></span>
+    <div class="tools">
+      <button type="button" id="btnExport">Export JSON</button>
+      <button type="button" id="btnImport">Import JSON</button>
+      <button type="button" id="btnReset">รีเซ็ตตัวอย่าง</button>
+      <input type="file" id="fileImport" accept="application/json" hidden />
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "tulip-doc-cabinet-v1";
+
+  var SEED = [
+    {
+      id: "seed-1",
+      name: "ต่ออายุสัญญากำจัดปลวก",
+      category: "ปลวก",
+      dueDate: addDays(today(), 18),
+      reminderDaysBefore: 21,
+      storageType: "physical",
+      physicalLocation: "ชั้น 2 ตู้แฟ้มสีเขียว ช่องบน",
+      note: "สัญญาปีล่าสุดกับร้านเดิม เบอร์ติดต่อแปะไว้หน้าแฟ้ม"
+    },
+    {
+      id: "seed-2",
+      name: "รีไฟแนนซ์บ้าน (เทียบข้อเสนอธนาคาร)",
+      category: "จำนอง/รีไฟแนนซ์",
+      dueDate: addDays(today(), 5),
+      reminderDaysBefore: 30,
+      storageType: "cloud",
+      cloudLink: "https://drive.google.com/",
+      note: "ดอกเบี้ยคงที่ 3 ปีแรกกำลังจะหมด ต้องคุยกับธนาคารก่อนหมดสัญญา"
+    },
+    {
+      id: "seed-3",
+      name: "ต่อประกันรถยนต์ชั้น 1",
+      category: "ประกัน",
+      dueDate: addDays(today(), -3),
+      reminderDaysBefore: 14,
+      storageType: "cloud",
+      cloudLink: "https://onedrive.live.com/",
+      note: ""
+    },
+    {
+      id: "seed-4",
+      name: "กรมธรรม์ประกันสุขภาพ (ฉบับจริง)",
+      category: "ประกัน",
+      dueDate: addDays(today(), 120),
+      reminderDaysBefore: 30,
+      storageType: "physical",
+      physicalLocation: "ห้องทำงาน ลิ้นชักที่ 2 ซองสีน้ำตาล",
+      note: ""
+    }
+  ];
+
+  function today() {
+    var d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function addDays(iso, n) {
+    var d = new Date(iso + "T00:00:00");
+    d.setDate(d.getDate() + n);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function daysBetween(a, b) {
+    var da = new Date(a + "T00:00:00");
+    var db = new Date(b + "T00:00:00");
+    return Math.round((db - da) / 86400000);
+  }
+
+  function uid() {
+    return "id-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7);
+  }
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return SEED.slice();
+      var parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return SEED.slice();
+      return parsed;
+    } catch (e) {
+      return SEED.slice();
+    }
+  }
+
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+
+  function statusOf(item) {
+    var d = daysBetween(today(), item.dueDate);
+    if (d < 0) return "critical";
+    if (d <= (Number(item.reminderDaysBefore) || 0)) return "warn";
+    return "good";
+  }
+
+  function statusLabel(status, days) {
+    if (status === "critical") return "เลยกำหนดมา " + Math.abs(days) + " วัน";
+    if (status === "warn") return days === 0 ? "ครบกำหนดวันนี้" : "อีก " + days + " วัน";
+    return "อีก " + days + " วัน";
+  }
+
+  function statusText(status) {
+    if (status === "critical") return "เลยกำหนด";
+    if (status === "warn") return "ใกล้ครบกำหนด";
+    return "ปกติ";
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  var items = load();
+
+  var elStats = document.getElementById("stats");
+  var elList = document.getElementById("list");
+  var elSearch = document.getElementById("search");
+  var elFilterCategory = document.getElementById("filterCategory");
+  var elFilterStatus = document.getElementById("filterStatus");
+  var elEditor = document.getElementById("editor");
+  var elEditorTitle = document.getElementById("editorTitle");
+  var elFootNote = document.getElementById("footNote");
+
+  document.getElementById("btnNew").addEventListener("click", function () {
+    openEditor(null);
+  });
+  document.getElementById("btnCancel").addEventListener("click", closeEditor);
+  document.getElementById("editor").addEventListener("submit", onSubmit);
+  elSearch.addEventListener("input", render);
+  elFilterCategory.addEventListener("change", render);
+  elFilterStatus.addEventListener("change", render);
+
+  var radios = document.getElementsByName("storageType");
+  for (var i = 0; i < radios.length; i++) {
+    radios[i].addEventListener("change", toggleStorageFields);
+  }
+
+  document.getElementById("btnExport").addEventListener("click", function () {
+    var blob = new Blob([JSON.stringify(items, null, 2)], { type: "application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "document-cabinet-" + today() + ".json";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  document.getElementById("btnImport").addEventListener("click", function () {
+    document.getElementById("fileImport").click();
+  });
+
+  document.getElementById("fileImport").addEventListener("change", function (e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      try {
+        var parsed = JSON.parse(reader.result);
+        if (!Array.isArray(parsed)) throw new Error("bad format");
+        items = parsed;
+        save();
+        render();
+      } catch (err) {
+        alert("ไฟล์ JSON ไม่ถูกต้อง: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  });
+
+  document.getElementById("btnReset").addEventListener("click", function () {
+    if (!confirm("รีเซ็ตกลับไปใช้ข้อมูลตัวอย่าง? ข้อมูลปัจจุบันจะหายไป")) return;
+    items = SEED.slice();
+    save();
+    render();
+  });
+
+  function toggleStorageFields() {
+    var val = document.querySelector('input[name="storageType"]:checked').value;
+    document.getElementById("wrapCloud").style.display = val === "cloud" ? "flex" : "none";
+    document.getElementById("wrapPhysical").style.display = val === "physical" ? "flex" : "none";
+  }
+
+  function openEditor(item) {
+    elEditor.classList.add("open");
+    elEditorTitle.textContent = item ? "แก้ไขรายการ" : "เพิ่มรายการเอกสาร";
+    document.getElementById("itemId").value = item ? item.id : "";
+    document.getElementById("fName").value = item ? item.name : "";
+    document.getElementById("fCategory").value = item ? item.category : "";
+    document.getElementById("fDueDate").value = item ? item.dueDate : today();
+    document.getElementById("fReminder").value = item ? item.reminderDaysBefore : 14;
+    document.getElementById("fCloudLink").value = item ? (item.cloudLink || "") : "";
+    document.getElementById("fPhysicalLocation").value = item ? (item.physicalLocation || "") : "";
+    document.getElementById("fNote").value = item ? (item.note || "") : "";
+
+    var storageType = item ? item.storageType : "cloud";
+    for (var i = 0; i < radios.length; i++) {
+      radios[i].checked = radios[i].value === storageType;
+    }
+    toggleStorageFields();
+    document.getElementById("fName").focus();
+    elEditor.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function closeEditor() {
+    elEditor.classList.remove("open");
+    elEditor.reset();
+  }
+
+  function onSubmit(e) {
+    e.preventDefault();
+    var id = document.getElementById("itemId").value;
+    var storageType = document.querySelector('input[name="storageType"]:checked').value;
+
+    var data = {
+      id: id || uid(),
+      name: document.getElementById("fName").value.trim(),
+      category: document.getElementById("fCategory").value.trim(),
+      dueDate: document.getElementById("fDueDate").value,
+      reminderDaysBefore: Number(document.getElementById("fReminder").value) || 0,
+      storageType: storageType,
+      cloudLink: document.getElementById("fCloudLink").value.trim(),
+      physicalLocation: document.getElementById("fPhysicalLocation").value.trim(),
+      note: document.getElementById("fNote").value.trim()
+    };
+
+    if (id) {
+      items = items.map(function (it) { return it.id === id ? data : it; });
+    } else {
+      items.push(data);
+    }
+
+    save();
+    closeEditor();
+    render();
+  }
+
+  function markRenewed(id) {
+    var item = items.find(function (it) { return it.id === id; });
+    if (!item) return;
+    var next = prompt("ต่ออายุแล้ว — ระบุวันครบกำหนดรอบถัดไป (YYYY-MM-DD):", suggestNextDue(item.dueDate));
+    if (!next) return;
+    item.dueDate = next;
+    save();
+    render();
+  }
+
+  function suggestNextDue(iso) {
+    return addDays(iso, 365);
+  }
+
+  function removeItem(id) {
+    if (!confirm("ลบรายการนี้?")) return;
+    items = items.filter(function (it) { return it.id !== id; });
+    save();
+    render();
+  }
+
+  window.tulipDocCabinet = { openEditor: openEditor, markRenewed: markRenewed, removeItem: removeItem };
+
+  function render() {
+    var categories = Array.from(new Set(items.map(function (it) { return it.category; }).filter(Boolean))).sort();
+
+    var currentCategoryFilter = elFilterCategory.value;
+    elFilterCategory.innerHTML = '<option value="">ทุกหมวดหมู่</option>' +
+      categories.map(function (c) { return '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + "</option>"; }).join("");
+    elFilterCategory.value = categories.indexOf(currentCategoryFilter) >= 0 ? currentCategoryFilter : "";
+
+    var categoryList = document.getElementById("categoryList");
+    categoryList.innerHTML = categories.map(function (c) { return '<option value="' + escapeHtml(c) + '"></option>'; }).join("");
+
+    var counts = { total: items.length, critical: 0, warn: 0, physical: 0 };
+    items.forEach(function (it) {
+      var s = statusOf(it);
+      if (s === "critical") counts.critical++;
+      if (s === "warn") counts.warn++;
+      if (it.storageType === "physical") counts.physical++;
+    });
+
+    elStats.innerHTML =
+      stat(counts.total, "ทั้งหมด", "") +
+      stat(counts.critical, "เลยกำหนด", "critical") +
+      stat(counts.warn, "ใกล้ครบกำหนด", "warn") +
+      stat(counts.physical, "เก็บแบบ Physical", "good");
+
+    var q = elSearch.value.trim().toLowerCase();
+    var fCat = elFilterCategory.value;
+    var fStatus = elFilterStatus.value;
+
+    var filtered = items.filter(function (it) {
+      if (q && it.name.toLowerCase().indexOf(q) === -1) return false;
+      if (fCat && it.category !== fCat) return false;
+      if (fStatus && statusOf(it) !== fStatus) return false;
+      return true;
+    });
+
+    filtered.sort(function (a, b) { return a.dueDate < b.dueDate ? -1 : 1; });
+
+    if (filtered.length === 0) {
+      elList.innerHTML = '<div class="empty">ไม่พบรายการที่ตรงกับตัวกรอง</div>';
+    } else {
+      elList.innerHTML = filtered.map(cardHtml).join("");
+    }
+
+    elFootNote.textContent = "เก็บข้อมูล " + items.length + " รายการไว้ใน localStorage ของเบราว์เซอร์นี้เท่านั้น";
+  }
+
+  function stat(n, label, cls) {
+    return '<div class="stat ' + cls + '"><div class="n num">' + n + '</div><div class="l">' + label + "</div></div>";
+  }
+
+  function cardHtml(it) {
+    var status = statusOf(it);
+    var days = daysBetween(today(), it.dueDate);
+    var storageHtml = it.storageType === "cloud"
+      ? '<span class="storage">☁️ <a href="' + escapeHtml(it.cloudLink || "#") + '" target="_blank" rel="noopener noreferrer">เปิดลิงก์เอกสาร</a></span>'
+      : '<span class="storage">🗄️ <span class="loc">' + escapeHtml(it.physicalLocation || "ไม่ระบุตำแหน่ง") + "</span></span>";
+
+    return '' +
+      '<article class="card ' + status + '">' +
+        '<div class="stripe"></div>' +
+        '<div class="body">' +
+          '<div class="row1">' +
+            '<span class="title">' + escapeHtml(it.name) + "</span>" +
+            '<span class="chip ' + status + '">' + statusText(status) + "</span>" +
+          "</div>" +
+          '<div class="meta">' +
+            '<span class="chip category">' + escapeHtml(it.category || "ไม่ระบุหมวดหมู่") + "</span>" +
+            '<span class="num">' + escapeHtml(it.dueDate) + " · " + statusLabel(status, days) + "</span>" +
+            storageHtml +
+          "</div>" +
+          (it.note ? '<div class="note">' + escapeHtml(it.note) + "</div>" : "") +
+        "</div>" +
+        '<div class="actions">' +
+          '<button class="ghost" onclick="tulipDocCabinet.markRenewed(\'' + it.id + '\')" type="button">✓ ต่ออายุแล้ว</button>' +
+          '<button class="ghost" onclick="tulipDocCabinet.openEditor(' + "window.__findItem('" + it.id + "')" + ')" type="button">แก้ไข</button>' +
+          '<button class="ghost" onclick="tulipDocCabinet.removeItem(\'' + it.id + '\')" type="button">ลบ</button>' +
+        "</div>" +
+      "</article>";
+  }
+
+  window.__findItem = function (id) {
+    return items.find(function (it) { return it.id === id; }) || null;
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
