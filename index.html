@@ -6,84 +6,80 @@
 <title>ตู้เอกสาร — Document Cabinet Prototype</title>
 <style>
   :root {
-    --ink: #14231a;
-    --ink-soft: #3c4a3f;
-    --paper: #eef0e7;
-    --paper-raised: #f7f8f2;
-    --line: #d7d9cc;
-    --accent: #3b6a46;
-    --accent-strong: #2b4d33;
-    --kraft: #b3793f;
-    --kraft-bg: #f1e3cd;
-    --good: #3f8a54;
-    --good-bg: #e3efe4;
-    --warn: #b9791f;
-    --warn-bg: #f6ead2;
-    --critical: #b1402c;
-    --critical-bg: #f7dfd8;
-    --shadow: 0 1px 2px rgba(20, 35, 26, 0.06), 0 6px 16px rgba(20, 35, 26, 0.05);
+    --ink: #37352f;
+    --ink-soft: #787774;
+    --paper: #f7f7f5;
+    --paper-raised: #ffffff;
+    --line: #e9e9e7;
+    --accent: #2383e2;
+    --accent-strong: #0b6bc9;
+    --kraft: #8a6550;
+    --kraft-bg: #f1e0da;
+    --good: #448361;
+    --good-bg: #dbeddb;
+    --warn: #9f6b00;
+    --warn-bg: #fdecc8;
+    --critical: #d44c47;
+    --critical-bg: #ffe2dd;
     color-scheme: light;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --ink: #e7e9e1;
-      --ink-soft: #b6bcac;
-      --paper: #11160f;
-      --paper-raised: #191f15;
-      --line: #2c3427;
-      --accent: #6fa97d;
-      --accent-strong: #8fc49a;
-      --kraft: #d2a377;
-      --kraft-bg: #2c2419;
-      --good: #6fbb80;
-      --good-bg: #1c2b1e;
-      --warn: #e0ab54;
-      --warn-bg: #332711;
-      --critical: #e08370;
-      --critical-bg: #341f19;
-      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+      --ink: #d4d4d4;
+      --ink-soft: #999999;
+      --paper: #191919;
+      --paper-raised: #202020;
+      --line: #3a3a3a;
+      --accent: #529cca;
+      --accent-strong: #6cb2df;
+      --kraft: #b58b6f;
+      --kraft-bg: #3a2c22;
+      --good: #4dab9a;
+      --good-bg: #1f3b30;
+      --warn: #e0af4f;
+      --warn-bg: #4d3c1f;
+      --critical: #ff7369;
+      --critical-bg: #4b2c2a;
       color-scheme: dark;
     }
   }
 
   :root[data-theme="dark"] {
-    --ink: #e7e9e1;
-    --ink-soft: #b6bcac;
-    --paper: #11160f;
-    --paper-raised: #191f15;
-    --line: #2c3427;
-    --accent: #6fa97d;
-    --accent-strong: #8fc49a;
-    --kraft: #d2a377;
-    --kraft-bg: #2c2419;
-    --good: #6fbb80;
-    --good-bg: #1c2b1e;
-    --warn: #e0ab54;
-    --warn-bg: #332711;
-    --critical: #e08370;
-    --critical-bg: #341f19;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
+    --ink: #d4d4d4;
+    --ink-soft: #999999;
+    --paper: #191919;
+    --paper-raised: #202020;
+    --line: #3a3a3a;
+    --accent: #529cca;
+    --accent-strong: #6cb2df;
+    --kraft: #b58b6f;
+    --kraft-bg: #3a2c22;
+    --good: #4dab9a;
+    --good-bg: #1f3b30;
+    --warn: #e0af4f;
+    --warn-bg: #4d3c1f;
+    --critical: #ff7369;
+    --critical-bg: #4b2c2a;
     color-scheme: dark;
   }
 
   :root[data-theme="light"] {
-    --ink: #14231a;
-    --ink-soft: #3c4a3f;
-    --paper: #eef0e7;
-    --paper-raised: #f7f8f2;
-    --line: #d7d9cc;
-    --accent: #3b6a46;
-    --accent-strong: #2b4d33;
-    --kraft: #b3793f;
-    --kraft-bg: #f1e3cd;
-    --good: #3f8a54;
-    --good-bg: #e3efe4;
-    --warn: #b9791f;
-    --warn-bg: #f6ead2;
-    --critical: #b1402c;
-    --critical-bg: #f7dfd8;
-    --shadow: 0 1px 2px rgba(20, 35, 26, 0.06), 0 6px 16px rgba(20, 35, 26, 0.05);
+    --ink: #37352f;
+    --ink-soft: #787774;
+    --paper: #f7f7f5;
+    --paper-raised: #ffffff;
+    --line: #e9e9e7;
+    --accent: #2383e2;
+    --accent-strong: #0b6bc9;
+    --kraft: #8a6550;
+    --kraft-bg: #f1e0da;
+    --good: #448361;
+    --good-bg: #dbeddb;
+    --warn: #9f6b00;
+    --warn-bg: #fdecc8;
+    --critical: #d44c47;
+    --critical-bg: #ffe2dd;
     color-scheme: light;
   }
 
@@ -93,8 +89,8 @@
     margin: 0;
     background: var(--paper);
     color: var(--ink);
-    font-family: "Sarabun", "Noto Sans Thai", "Leelawadee UI", -apple-system,
-      "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, "Segoe UI", "Noto Sans Thai", "Leelawadee UI",
+      Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     padding: 2.5rem 1.25rem 4rem;
   }
@@ -140,10 +136,10 @@
     font-size: 0.7rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--accent);
-    background: var(--good-bg);
+    color: var(--ink-soft);
+    background: var(--paper-raised);
     border: 1px solid var(--line);
-    border-radius: 999px;
+    border-radius: 4px;
     padding: 0.15rem 0.6rem;
     white-space: nowrap;
   }
@@ -164,9 +160,8 @@
   .stat {
     background: var(--paper-raised);
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 0.85rem 1rem;
-    box-shadow: var(--shadow);
   }
 
   .stat .n {
@@ -195,7 +190,7 @@
   .toolbar input[type="search"] {
     flex: 1 1 200px;
     padding: 0.55rem 0.8rem;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--paper-raised);
     color: var(--ink);
@@ -204,7 +199,7 @@
 
   select {
     padding: 0.55rem 0.7rem;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--paper-raised);
     color: var(--ink);
@@ -214,7 +209,7 @@
   button {
     font: inherit;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--paper-raised);
     color: var(--ink);
@@ -262,9 +257,8 @@
     gap: 0.9rem;
     background: var(--paper-raised);
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 0.9rem 1rem;
-    box-shadow: var(--shadow);
   }
 
   .card .stripe {
@@ -293,7 +287,7 @@
     font-size: 0.72rem;
     letter-spacing: 0.02em;
     padding: 0.15rem 0.55rem;
-    border-radius: 999px;
+    border-radius: 4px;
     border: 1px solid var(--line);
     white-space: nowrap;
   }
@@ -349,7 +343,7 @@
     color: var(--ink-soft);
     padding: 2rem 1rem;
     border: 1px dashed var(--line);
-    border-radius: 10px;
+    border-radius: 6px;
   }
 
   form.editor {
@@ -358,9 +352,8 @@
     gap: 0.75rem;
     background: var(--paper-raised);
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 1rem;
-    box-shadow: var(--shadow);
   }
 
   form.editor.open { display: flex; }
@@ -391,7 +384,7 @@
   label input, label textarea, label select {
     font: inherit;
     padding: 0.5rem 0.65rem;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--paper);
     color: var(--ink);
