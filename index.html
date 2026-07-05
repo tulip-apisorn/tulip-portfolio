@@ -6,84 +6,64 @@
 <title>ตู้เอกสาร — Document Cabinet Prototype</title>
 <style>
   :root {
-    --ink: #14231a;
-    --ink-soft: #3c4a3f;
-    --paper: #eef0e7;
-    --paper-raised: #f7f8f2;
-    --line: #d7d9cc;
-    --accent: #3b6a46;
-    --accent-strong: #2b4d33;
-    --kraft: #b3793f;
-    --kraft-bg: #f1e3cd;
-    --good: #3f8a54;
-    --good-bg: #e3efe4;
-    --warn: #b9791f;
-    --warn-bg: #f6ead2;
-    --critical: #b1402c;
-    --critical-bg: #f7dfd8;
-    --shadow: 0 1px 2px rgba(20, 35, 26, 0.06), 0 6px 16px rgba(20, 35, 26, 0.05);
+    --ink: #37352f;
+    --ink-soft: #6b6560;
+    --paper: #f9f7f4;
+    --paper-raised: #ffffff;
+    --line: rgba(55, 53, 47, 0.1);
+    --accent: #2e6da4;
+    --accent-strong: #1d4f7a;
+    --kraft: #ad7a3a;
+    --kraft-bg: #fdf3e3;
+    --good: #2d8a5e;
+    --good-bg: #e8f5ee;
+    --warn: #c47a1a;
+    --warn-bg: #fef4e1;
+    --critical: #c0392b;
+    --critical-bg: #fde8e6;
+    --shadow: 0 1px 3px rgba(55, 53, 47, 0.06), 0 4px 12px rgba(55, 53, 47, 0.04);
     color-scheme: light;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --ink: #e7e9e1;
-      --ink-soft: #b6bcac;
-      --paper: #11160f;
-      --paper-raised: #191f15;
-      --line: #2c3427;
-      --accent: #6fa97d;
-      --accent-strong: #8fc49a;
-      --kraft: #d2a377;
-      --kraft-bg: #2c2419;
-      --good: #6fbb80;
-      --good-bg: #1c2b1e;
-      --warn: #e0ab54;
-      --warn-bg: #332711;
-      --critical: #e08370;
-      --critical-bg: #341f19;
-      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
-      color-scheme: dark;
+      --ink: #37352f;
+      --ink-soft: #6b6560;
+      --paper: #f9f7f4;
+      --paper-raised: #ffffff;
+      --line: rgba(55, 53, 47, 0.1);
+      --accent: #2e6da4;
+      --accent-strong: #1d4f7a;
+      --kraft: #ad7a3a;
+      --kraft-bg: #fdf3e3;
+      --good: #2d8a5e;
+      --good-bg: #e8f5ee;
+      --warn: #c47a1a;
+      --warn-bg: #fef4e1;
+      --critical: #c0392b;
+      --critical-bg: #fde8e6;
+      --shadow: 0 1px 3px rgba(55, 53, 47, 0.06), 0 4px 12px rgba(55, 53, 47, 0.04);
+      color-scheme: light;
     }
   }
 
-  :root[data-theme="dark"] {
-    --ink: #e7e9e1;
-    --ink-soft: #b6bcac;
-    --paper: #11160f;
-    --paper-raised: #191f15;
-    --line: #2c3427;
-    --accent: #6fa97d;
-    --accent-strong: #8fc49a;
-    --kraft: #d2a377;
-    --kraft-bg: #2c2419;
-    --good: #6fbb80;
-    --good-bg: #1c2b1e;
-    --warn: #e0ab54;
-    --warn-bg: #332711;
-    --critical: #e08370;
-    --critical-bg: #341f19;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 20px rgba(0, 0, 0, 0.25);
-    color-scheme: dark;
-  }
-
-  :root[data-theme="light"] {
-    --ink: #14231a;
-    --ink-soft: #3c4a3f;
-    --paper: #eef0e7;
-    --paper-raised: #f7f8f2;
-    --line: #d7d9cc;
-    --accent: #3b6a46;
-    --accent-strong: #2b4d33;
-    --kraft: #b3793f;
-    --kraft-bg: #f1e3cd;
-    --good: #3f8a54;
-    --good-bg: #e3efe4;
-    --warn: #b9791f;
-    --warn-bg: #f6ead2;
-    --critical: #b1402c;
-    --critical-bg: #f7dfd8;
-    --shadow: 0 1px 2px rgba(20, 35, 26, 0.06), 0 6px 16px rgba(20, 35, 26, 0.05);
+  :root[data-theme="dark"], :root[data-theme="light"], :root {
+    --ink: #37352f;
+    --ink-soft: #6b6560;
+    --paper: #f9f7f4;
+    --paper-raised: #ffffff;
+    --line: rgba(55, 53, 47, 0.1);
+    --accent: #2e6da4;
+    --accent-strong: #1d4f7a;
+    --kraft: #ad7a3a;
+    --kraft-bg: #fdf3e3;
+    --good: #2d8a5e;
+    --good-bg: #e8f5ee;
+    --warn: #c47a1a;
+    --warn-bg: #fef4e1;
+    --critical: #c0392b;
+    --critical-bg: #fde8e6;
+    --shadow: 0 1px 3px rgba(55, 53, 47, 0.06), 0 4px 12px rgba(55, 53, 47, 0.04);
     color-scheme: light;
   }
 
