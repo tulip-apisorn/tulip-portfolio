@@ -11,17 +11,17 @@
     --paper: #f9f7f4;
     --paper-raised: #ffffff;
     --line: rgba(55, 53, 47, 0.1);
-    --accent: #2e6da4;
-    --accent-strong: #1d4f7a;
-    --kraft: #ad7a3a;
-    --kraft-bg: #fdf3e3;
-    --good: #2d8a5e;
-    --good-bg: #e8f5ee;
-    --warn: #c47a1a;
-    --warn-bg: #fef4e1;
-    --critical: #c0392b;
-    --critical-bg: #fde8e6;
-    --shadow: 0 1px 3px rgba(55, 53, 47, 0.06), 0 4px 12px rgba(55, 53, 47, 0.04);
+    --accent: #0b6e99;
+    --accent-strong: #0a5c81;
+    --kraft: #8b5e34;
+    --kraft-bg: #f1e3d3;
+    --good: #0f7b6c;
+    --good-bg: #dbeded;
+    --warn: #9f6b00;
+    --warn-bg: #fbf3db;
+    --critical: #c4554d;
+    --critical-bg: #fbe4e4;
+    --shadow: none;
     color-scheme: light;
   }
 
@@ -53,17 +53,17 @@
     --paper: #f9f7f4;
     --paper-raised: #ffffff;
     --line: rgba(55, 53, 47, 0.1);
-    --accent: #2e6da4;
-    --accent-strong: #1d4f7a;
-    --kraft: #ad7a3a;
-    --kraft-bg: #fdf3e3;
-    --good: #2d8a5e;
-    --good-bg: #e8f5ee;
-    --warn: #c47a1a;
-    --warn-bg: #fef4e1;
-    --critical: #c0392b;
-    --critical-bg: #fde8e6;
-    --shadow: 0 1px 3px rgba(55, 53, 47, 0.06), 0 4px 12px rgba(55, 53, 47, 0.04);
+    --accent: #0b6e99;
+    --accent-strong: #0a5c81;
+    --kraft: #8b5e34;
+    --kraft-bg: #f1e3d3;
+    --good: #0f7b6c;
+    --good-bg: #dbeded;
+    --warn: #9f6b00;
+    --warn-bg: #fbf3db;
+    --critical: #c4554d;
+    --critical-bg: #fbe4e4;
+    --shadow: none;
     color-scheme: light;
   }
 
@@ -120,10 +120,10 @@
     font-size: 0.7rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--accent);
-    background: var(--good-bg);
+    color: var(--ink-soft);
+    background: rgba(55, 53, 47, 0.06);
     border: 1px solid var(--line);
-    border-radius: 999px;
+    border-radius: 4px;
     padding: 0.15rem 0.6rem;
     white-space: nowrap;
   }
@@ -144,9 +144,8 @@
   .stat {
     background: var(--paper-raised);
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 0.85rem 1rem;
-    box-shadow: var(--shadow);
   }
 
   .stat .n {
@@ -175,7 +174,7 @@
   .toolbar input[type="search"] {
     flex: 1 1 200px;
     padding: 0.55rem 0.8rem;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--paper-raised);
     color: var(--ink);
@@ -184,7 +183,7 @@
 
   select {
     padding: 0.55rem 0.7rem;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--paper-raised);
     color: var(--ink);
@@ -194,7 +193,7 @@
   button {
     font: inherit;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--paper-raised);
     color: var(--ink);
@@ -202,7 +201,7 @@
     transition: background 0.15s ease, border-color 0.15s ease;
   }
 
-  button:hover { border-color: var(--accent); }
+  button:hover { background: rgba(55, 53, 47, 0.06); }
 
   button:focus-visible,
   input:focus-visible,
@@ -213,13 +212,13 @@
   }
 
   button.primary {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fbfcf8;
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fbfbfa;
     font-weight: 600;
   }
 
-  button.primary:hover { background: var(--accent-strong); }
+  button.primary:hover { background: #2f2d28; }
 
   button.ghost {
     border-color: transparent;
@@ -242,9 +241,14 @@
     gap: 0.9rem;
     background: var(--paper-raised);
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 0.9rem 1rem;
-    box-shadow: var(--shadow);
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .card:hover {
+    background: rgba(55, 53, 47, 0.025);
+    border-color: rgba(55, 53, 47, 0.18);
   }
 
   .card .stripe {
@@ -272,8 +276,8 @@
   .chip {
     font-size: 0.72rem;
     letter-spacing: 0.02em;
-    padding: 0.15rem 0.55rem;
-    border-radius: 999px;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
     border: 1px solid var(--line);
     white-space: nowrap;
   }
@@ -329,7 +333,7 @@
     color: var(--ink-soft);
     padding: 2rem 1rem;
     border: 1px dashed var(--line);
-    border-radius: 10px;
+    border-radius: 6px;
   }
 
   form.editor {
@@ -338,9 +342,8 @@
     gap: 0.75rem;
     background: var(--paper-raised);
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 1rem;
-    box-shadow: var(--shadow);
   }
 
   form.editor.open { display: flex; }
@@ -371,7 +374,7 @@
   label input, label textarea, label select {
     font: inherit;
     padding: 0.5rem 0.65rem;
-    border-radius: 8px;
+    border-radius: 6px;
     border: 1px solid var(--line);
     background: var(--paper);
     color: var(--ink);
@@ -426,7 +429,7 @@
 
   <header class="top">
     <div class="brand">
-      <h1>ตู้เอกสาร</h1>
+      <h1>🗄️ ตู้เอกสาร</h1>
       <span class="tag">Prototype · local only</span>
     </div>
     <p>รวมทุกเอกสารสำคัญไว้จุดเดียว บอกว่าอะไรใกล้ครบกำหนด และของจริงอยู่ที่ไหน</p>
